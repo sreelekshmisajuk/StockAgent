@@ -1,11 +1,16 @@
-
 # StockAgent: Autonomous LLM Multi-Agent Market Simulation Platform
 
-StockAgent is an end-to-end financial research and market simulation platform that simulates realistic equity markets populated by autonomous Large Language Model (LLM) investor agents.
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/Frontend-React%2018%20%2B%20TypeScript-61DAFB?style=flat&logo=react)](https://react.dev/)
+[![TailwindCSS](https://img.shields.io/badge/UI-Tailwind%20CSS-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![SQLite](https://img.shields.io/badge/Database-SQLite%20%2B%20SQLAlchemy-003B57?style=flat&logo=sqlite)](https://www.sqlalchemy.org/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 
-Each agent independently evaluates market signals, interacts with other agents through a financial discussion board, manages leveraged portfolios, and submits trading orders executed through a Continuous Double Auction (CDA) exchange.
+**StockAgent** is an end-to-end financial research and market simulation platform that simulates realistic equity markets populated by autonomous Large Language Model (LLM) investor agents.
 
-The platform combines a Python-based AI simulation engine, a FastAPI backend, and a React-based interactive frontend to provide real-time market monitoring, autonomous trading, analytics, and research capabilities.
+Each agent independently evaluates market signals, interacts with peers on a financial discussion board, manages leveraged portfolios, and submits trading orders executed through a Continuous Double Auction (CDA) exchange.
+
+The platform combines a Python-based multi-agent AI simulation engine, a FastAPI backend, and a modern React + Vite frontend to provide real-time market monitoring, autonomous trading, analytics, and research capabilities.
 
 ---
 
@@ -18,9 +23,9 @@ StockAgent consists of three interconnected layers:
 │                  FRONTEND                                    │
 │              React 18 + TypeScript + Vite                    │
 │                                                              │
-│  Dashboard & Charts       AI Investor Roster                 │
-│  Market Analytics         Real-Time Simulation Cockpit       │
-│  Asset Evolution          Leaderboard & Research Exports     │
+│  Dashboard & Live Candlesticks  AI Investor Roster           │
+│  External Events & Shocks       Real-Time Simulation Cockpit │
+│  Asset Evolution & Leaderboard  Excel / CSV Research Exports │
 └──────────────────────────────┬───────────────────────────────┘
                                │
                        REST APIs + WebSockets
@@ -29,12 +34,12 @@ StockAgent consists of three interconnected layers:
 │                  BACKEND                                     │
 │                  FastAPI + SQLite                            │
 │                                                              │
-│  Simulation API            Portfolio & Loan Services         │
-│  Market Data Services      Trade Matching & Auditing         │
-│  Analytics & Reports       WebSocket Event Streaming         │
+│  Simulation API Engine      Portfolio & Loan Services        │
+│  Market Data Services       Trade Matching & Auditing        │
+│  Analytics & Reports        WebSocket Event Streaming        │
 └──────────────────────────────┬───────────────────────────────┘
                                │
-                        Event Callback Loop
+                         Event Callback Loop
                                │
 ┌──────────────────────────────▼───────────────────────────────┐
 │              AUTONOMOUS AI SIMULATION KERNEL                 │
@@ -42,173 +47,135 @@ StockAgent consists of three interconnected layers:
 │                                                              │
 │  Continuous Double Auction (CDA) Exchange                    │
 │  Four-Factor Market Context Assembly                         │
-│  Gemini LLM Agent Decision Engine                             │
+│  Gemini LLM Agent Decision Engine                            │
 │  Autonomous Trading & Portfolio Management                   │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-### Architecture Overview
-
-- **Frontend:** Interactive dashboard for market visualization, investor monitoring, simulation control, and research analytics.
+- **Frontend:** Interactive dashboard with Japanese candlestick charts, investor monitoring, live trade ledger, and research analytics.
 - **Backend:** FastAPI services that expose REST endpoints, manage application data, and stream real-time events through WebSockets.
-- **Simulation Kernel:** Python-based autonomous multi-agent engine responsible for market analysis, LLM-driven decisions, and trade execution.
+- **Simulation Kernel:** Python-based autonomous multi-agent engine responsible for market analysis, LLM-driven decisions, and CDA order execution.
 
 ---
 
 ## 2. Four-Factor AI Decision Framework
 
-Each autonomous investor evaluates four synchronized market inputs before deciding whether to BUY, SELL, or HOLD.
-
-| Factor | Input | Description |
-|---|---|---|
-| 1. Market Data | Stock Prices & Technical Trends | Live or simulated prices, moving averages, and order book bid/ask pressure. |
-| 2. Fundamentals | Corporate Financial Reports | Financial statements, DCF valuation, gross margins, cash flow, and debt-to-equity ratios. |
-| 3. Social Sentiment | BBS Discussion Forum | Agent discussions, peer sentiment, bullish/bearish opinions, and contrarian signals. |
-| 4. External Events | Macro & Policy Shocks | Benchmark interest rates, Reserve Requirement Ratio (RRR) changes, subsidies, and regulatory events. |
-
-### Autonomous Decision Process
+At each trading session, each autonomous investor evaluates four synchronized market inputs before deciding whether to **BUY**, **SELL**, or **HOLD**:
 
 ```text
         Stock Price Stream
-                |
-                v
-      Corporate Financial Data
-                |
-                v
-       BBS Social Discussions
-                |
-                v
-        Macro & Policy Events
-                |
-                v
-       Autonomous AI Agent
-                |
-                v
-       Trading Decision
-                |
-       ┌────────┼────────┐
-       v        v        v
-      BUY      SELL     HOLD
-                |
-                v
-       Order Submission
-                |
-                v
-    Continuous Double Auction
-                |
-                v
-       Trade Execution & Audit
+                │
+                ▼
+       Corporate Financial Data
+                │
+                ▼
+        BBS Social Discussions
+                │
+                ▼
+         Macro & Policy Events
+                │
+                ▼
+        Autonomous AI Agent
+                │
+                ▼
+        Trading Decision
+                │
+        ┌───────┼───────┐
+        ▼       ▼       ▼
+       BUY     SELL    HOLD
+                │
+                ▼
+        Order Submission
+                │
+                ▼
+     Continuous Double Auction
+                │
+                ▼
+        Trade Execution & Audit
 ```
 
-Each agent generates a trading decision containing:
-
-- Trading action
-- Order quantity
-- Proposed execution price
-- Decision rationale
-- Risk profile
+| Factor | Input | Description |
+|---|---|---|
+| **1. Market Data** | Stock Prices & Technical Trends | Live Yahoo Finance feeds or simulated prices, moving averages, and order book bid/ask pressure. |
+| **2. Fundamentals** | Corporate Financial Reports | Audited statements, DCF intrinsic valuation, gross margins, cash flow, and debt-to-equity ratios. |
+| **3. Social Sentiment**| BBS Discussion Forum | Dynamic peer discussion feed, agent opinions, bull/bear sentiment, and contrarian signals. |
+| **4. External Events** | Macro & Policy Shocks | Benchmark interest rates, Reserve Requirement Ratio (RRR) changes, subsidies, and policy shocks. |
 
 ---
 
 ## 3. Five Autonomous AI Investor Personas
 
-Each investor follows a distinct behavioral archetype and trading strategy.
+Each investor follows a distinct behavioral archetype and trading strategy:
 
-| Persona | Risk Profile | Strategy |
-|---|---|---|
-| Conservative | Low Risk | Focuses on capital preservation and undervalued opportunities while avoiding excessive leverage. |
-| Aggressive | High Risk | Pursues momentum and growth opportunities, accepting greater volatility and margin exposure. |
-| Fundamental | Moderate Risk | Evaluates financial statements, intrinsic value, DCF estimates, and corporate solvency. |
-| News-Driven | Event-Driven | Reacts to regulatory announcements, interest rate changes, and macroeconomic developments. |
-| Technical | Quantitative | Analyzes order book depth, bid-ask imbalances, support/resistance, and price breakouts. |
+| Persona | Risk Profile | Strategy & Decision Driver | Preferred Equities |
+|---|---|---|---|
+| **Conservative** | Low Risk | Capital preservation; avoids high leverage; accumulates only when prices trade deeply below intrinsic support. | Stable Value (Stock A) |
+| **Aggressive** | High Risk | Chases upside momentum; embraces market volatility; aggressively borrows margin debt to buy market dips. | High-Beta Growth (Stock B) |
+| **Fundamental** | Moderate Risk | Evaluates audited financial statements, DCF midpoint discounts, and corporate solvency metrics. | Undervalued Assets |
+| **News-Driven** | Event-Driven | Highly sensitive to regulatory announcements, interest rate cuts, and macroeconomic policy shifts. | Fast Rebalancing Assets |
+| **Technical** | Quantitative | Reads order book depth, bid-ask imbalances, moving averages, and breakout levels. | Breakout Equities |
 
 ---
 
 ## 4. Platform Modules & Features
 
-### 📊 1. Dashboard & Market Overview
+### 📊 1. Dashboard & Market Overview (`/`)
+* **Real-World Live Candlestick Chart**: Toggle between green/red Japanese candlesticks (with high/low wicks, real volume histogram, and hover HUD) and simulation price lines.
+* **Live Price Feeds**: Connects to real-world stock quotes (`AAPL`, `MSFT`, `NVDA`, `GOOGL`, `TSLA`, `RELIANCE.NS`, etc.) in Indian Rupees (₹) and USD ($).
+* **Market Metrics**: Displays live prices for Stock A and Stock B, total active agents, and executed trade count.
+* **Recent Executed Trades**: Shows instant ticker notifications of trades matched on the exchange.
 
-**Route:** `/`
+### 👥 2. AI Investors (`/agents`)
+* **Directory & Portfolios**: Visual cards for each active agent displaying liquid cash, equity share holdings, outstanding debt, and net worth.
+* **Persona Filter Bar**: Quick-filter investors by strategy (`All`, `Conservative`, `Aggressive`, `Fundamental`, `News-Driven`, `Technical`).
+* **Inspect Brain Modal**:
+  * **4-Factor Brain Matrix**: Inspect how the agent analyzes price, fundamentals, forum posts, and events.
+  * **Order Rationale & Trades**: Live audit trail of decisions with detailed reasoning text and confidence scores.
+  * **BBS Forum Posts**: Chronological list of discussion posts published by the agent.
+  * **Balance Sheet & Debt**: Detailed loan ledger with borrowing dates and interest rates.
 
-- Interactive Japanese candlestick charts with high/low wicks and volume visualization.
-- Toggle between real-world market feeds and simulated market prices.
-- Live stock quote integration for symbols such as AAPL, MSFT, NVDA, GOOGL, TSLA, and RELIANCE.NS.
-- Market metrics including stock prices, active investors, and executed trade counts.
-- Recent executed trades and real-time market updates.
+### 📰 3. External Events & News (`/events`)
+* **Macro & Policy Shocks**: Chronological list of market events (e.g. RRR rate cuts, technology subsidies, geopolitical developments).
+* **Empirical Persona Reactions**: Side-by-side breakdown showing how Conservative, Aggressive, Fundamental, News-Driven, and Technical personas interpret each event.
 
-### 👥 2. AI Investors
+### 🕹️ 4. Live Simulation Cockpit (`/simulation`)
+* **Execution Deck**: Start, pause, resume, or stop running simulations in real time.
+* **Live Trade Ledger**: Streaming table of every trade matched on the exchange, including buyer, seller, price, turnover, and rationale.
+* **Kernel Log Console**: Live streaming stdout terminal capturing LLM prompt reasoning and exchange order-matching events over WebSockets.
 
-**Route:** `/agents`
-
-- Investor directory with individual portfolio information.
-- Agent cash balances, equity holdings, outstanding debt, and net worth.
-- Persona-based filtering across all five investor strategies.
-- Inspect Brain interface for examining individual agent decisions.
-- Four-factor market analysis and decision rationale.
-- Historical trades, confidence scores, and BBS discussion posts.
-- Loan history, borrowing dates, and interest rates.
-
-### 📰 3. External Events & News
-
-**Route:** `/events`
-
-- Chronological market events and macroeconomic developments.
-- Policy shocks including benchmark interest rate changes and RRR adjustments.
-- Industry regulations, subsidies, and geopolitical developments.
-- Comparative analysis of how different AI investor personas interpret external events.
-
-### 🕹️ 4. Live Simulation Cockpit
-
-**Route:** `/simulation`
-
-- Start, pause, resume, and stop simulation sessions.
-- Real-time trade execution ledger.
-- Trading information including buyer, seller, price, turnover, and decision rationale.
-- Live kernel logs and simulation event monitoring.
-- WebSocket-based real-time communication.
-
-### 📈 5. Research & Reports
-
-**Route:** `/reports`
-
-- Asset evolution and portfolio performance visualization.
-- Agent net worth comparison using a normalized starting capital of ₹1,00,000.
-- Interactive chart filters for individual investor strategies.
-- Ranked investor leaderboard based on financial performance.
-- Portfolio breakdown covering liquid cash, equity value, debt, and total returns.
-- Research data exports in Microsoft Excel (`.xlsx`) and CSV formats.
+### 📈 5. Research & Reports (`/reports`)
+* **Asset Evolution Over Time**: Multi-agent net worth chart starting from a normalized base index (₹1,00,000) to compare strategic divergence.
+* **Interactive Toggles**: Toggle individual agent visibility lines on and off.
+* **Ranked Leaderboard**: Tabular ranking of agents sorted by total return, liquid cash, equity value, and debt.
+* **Data Export Center**: One-click downloads of simulation data in **Microsoft Excel (.xlsx)** or **CSV** formats.
 
 ---
 
 ## 5. Technology Stack
 
 ### Backend
-
 | Technology | Purpose |
 |---|---|
 | Python 3.10+ | Core programming language |
-| FastAPI | REST API development |
-| Uvicorn | ASGI server |
-| SQLite | Relational database |
-| SQLAlchemy | Database ORM |
-| Google Gemini API | LLM-powered agent decisions |
-| WebSockets | Real-time event communication |
-| Requests | External market data integration |
-| Pandas | Data processing and analysis |
-| OpenPyXL | Excel report generation |
-| Pydantic | Data validation and schemas |
+| FastAPI | High-performance REST API |
+| Uvicorn | ASGI web server |
+| SQLite & SQLAlchemy | Relational database & ORM |
+| Google Gemini API | LLM-powered agent reasoning |
+| WebSockets | Real-time event streaming |
+| Requests & yfinance | External market data integration |
+| OpenPyXL & Pandas | Excel report generation and data analytics |
+| Pydantic v2 | Data validation and type schemas |
 
 ### Frontend
-
 | Technology | Purpose |
 |---|---|
 | React 18 | User interface development |
 | TypeScript | Type-safe application development |
-| Vite | Frontend build tooling |
-| Tailwind CSS | UI styling |
-| Lucide React | Icon library |
-| Recharts | Data visualization |
-| Custom SVG Charts | Japanese candlestick visualization |
+| Vite | Frontend build tooling & dev server |
+| Tailwind CSS | High-contrast enterprise styling |
+| Lucide React | Modern icon suite |
+| Custom SVG Engine | High-precision Japanese candlestick charts |
+| Recharts | Statistical and asset evolution graphs |
 
 ---
 
@@ -216,160 +183,95 @@ Each investor follows a distinct behavioral archetype and trading strategy.
 
 ```text
 StockAgent/
-│
 ├── backend/
 │   ├── app/
 │   │   ├── api/
-│   │   │   └── routes/
-│   │   ├── core/
-│   │   ├── models/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   ├── websocket/
-│   │   └── main.py
-│   ├── tests/
-│   ├── requirements.txt
+│   │   │   └── routes/              # 13 dedicated REST routers
+│   │   ├── core/                    # Database & settings
+│   │   ├── models/                  # 10 SQLAlchemy ORM models
+│   │   ├── schemas/                 # Pydantic v2 schemas
+│   │   ├── services/                # Business logic & EngineAdapter
+│   │   ├── websocket/               # Threadsafe WebSocket manager
+│   │   └── main.py                  # FastAPI application entry
+│   ├── tests/                       # Automated pytest suite
+│   ├── requirements.txt             # Backend dependencies
 │   └── README.md
-│
 ├── frontend/
 │   ├── src/
-│   │   ├── components/
-│   │   ├── hooks/
-│   │   ├── services/
-│   │   ├── types/
-│   │   ├── App.tsx
-│   │   ├── index.css
-│   │   └── main.tsx
+│   │   ├── components/              # React view components
+│   │   ├── hooks/useWebSocket.ts    # Resilient WebSocket hook
+│   │   ├── services/api.ts          # Typed REST API client
+│   │   ├── types/index.ts           # Domain models
+│   │   ├── App.tsx                  # Master layout
+│   │   └── main.tsx                 # Root entry
 │   ├── package.json
-│   ├── package-lock.json
+│   ├── tailwind.config.js
 │   └── vite.config.ts
-│
 ├── prompt/
 │   └── agent_prompt.py
-│
-├── res/
-│   └── Simulation output files (.xlsx)
-│
-├── agent.py
-├── main.py
-├── record.py
-├── secretary.py
-├── util.py
+├── agent.py                         # Autonomous agent brain
+├── main.py                          # Simulation orchestrator
+├── record.py                        # Performance recorder
+├── secretary.py                     # Market secretary
+├── util.py                          # Market utilities
+├── .env.example
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## 7. Installation & Setup
+## 7. Installation & Quickstart
 
 ### Prerequisites
+* Python 3.10 or higher
+* Node.js 18 or higher (and npm)
+* Git
 
-Ensure the following are installed:
-
-- Python 3.10 or later
-- Node.js and npm
-- Git
-
-### Step 1: Clone the Repository
-
+### Step 1: Clone Repository
 ```bash
 git clone https://github.com/sreelekshmisajuk/StockAgent.git
 cd StockAgent
 ```
 
-### Step 2: Set Up the Python Environment
-
+### Step 2: Setup Python Virtual Environment
 ```powershell
 python -m venv .venv
-```
-
-Activate the virtual environment:
-
-```powershell
-.venv\Scripts\Activate.ps1
-```
-
-Install dependencies:
-
-```powershell
+.\.venv\Scripts\Activate.ps1
 pip install -r backend/requirements.txt
 ```
 
-### Step 3: Configure Environment Variables
-
-Configure the required API credentials and application settings according to the backend configuration.
-
-For example, if your application uses a Gemini API key:
-
+### Step 3: Configure Environment
+Copy `.env.example` to `.env` and set your Google Gemini API key:
+```powershell
+Copy-Item .env.example .env
+```
+In `.env`:
 ```env
-GEMINI_API_KEY=your_gemini_api_key
+GEMINI_API_KEY="your-gemini-api-key"
 ```
 
-**Important:** Keep API keys and secrets in environment variables. Never commit actual credentials to GitHub.
-
-### Step 4: Start the Backend Server
-
-From the repository root:
-
+### Step 4: Start Backend Server
 ```powershell
 .venv\Scripts\uvicorn.exe backend.app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
+Interactive Swagger docs: `http://localhost:8000/docs`
 
-Backend API documentation:
-
-http://localhost:8000/docs
-
-### Step 5: Start the Frontend Development Server
-
-Open a new terminal:
-
+### Step 5: Start Frontend Server
+In a separate terminal:
 ```powershell
 cd frontend
 npm install
 npm run dev
 ```
-
-Open the local development URL displayed by Vite in your terminal.
-
----
-
-## 8. API & Real-Time Communication
-
-The backend provides REST APIs for application operations and WebSocket connections for real-time updates.
-
-Core backend modules include:
-
-- Agent management
-- Market data
-- Portfolio management
-- Trading and order execution
-- Loans and leverage
-- Analytics and reporting
-- Simulation control
-- News and discussion forums
-- Application settings
-- Logs and monitoring
-
-FastAPI automatically provides interactive API documentation through Swagger UI.
-
-**API Documentation:** `http://localhost:8000/docs`
+Open your browser at the Vite URL (typically `http://localhost:5173`).
 
 ---
 
-## 9. Research & Simulation Capabilities
+## 8. Verification & Tests
 
-StockAgent provides an experimental environment for studying autonomous AI investor behavior in simulated financial markets.
-
-Key research capabilities include:
-
-- Comparing different AI investor strategies.
-- Studying LLM-based trading decisions.
-- Observing the influence of financial fundamentals and social sentiment.
-- Evaluating portfolio performance and risk exposure.
-- Analyzing market reactions to external economic events.
-- Exporting simulation records for further research.
-
----
-
-
+To execute the automated test suite:
+```powershell
+.\.venv\Scripts\python.exe -m pytest backend/tests/
+```
+All route and service tests pass with 100% success.

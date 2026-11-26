@@ -5,17 +5,24 @@ from log.custom_logger import log
 
 
 def run_api(model, prompt, temperature: float = 0):
-    openai.api_key = ""
-    client = openai.OpenAI(api_key=openai.api_key)
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "user", "content": prompt},
-        ],
-        temperature=temperature,
-    )
-    resp = response.choices[0].message.content
-    return resp
+    import util
+    api_key = util.OPENAI_API_KEY or util.YUNWU_API_KEY or os.getenv("OPENAI_API_KEY", "")
+    if not api_key:
+        return ""
+    base_url = util.get_yunwu_v1_base_url() if (util.YUNWU_API_KEY and not util.OPENAI_API_KEY) else None
+    try:
+        client = openai.OpenAI(api_key=api_key, base_url=base_url)
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "user", "content": prompt},
+            ],
+            temperature=temperature,
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        log.logger.warning(f"Secretary API call failed: {e}")
+        return ""
 
 
 class Secretary:

@@ -5,7 +5,7 @@ BACKGROUND_PROMPT = NamedBlock(
     name="Background",
     content="""
     You are a stock trader, and you will simulate your interactions with other traders in the market.
-    There are four stocks in the market, named A, B, C, and D, where B is the newly listed stock.
+    There are two stocks in the market, named A and B.
     Next, follow the instructions to complete your trading actions.
     """
 )
@@ -14,10 +14,9 @@ BACKGROUND_PROMPT = NamedBlock(
 LASTDAY_FORUM_AND_STOCK_PROMPT = NamedBlock(
     name="Last Day Forum and Stock",
     content="""
-    After the close of trading yesterday, the stock prices of Company A, Company B,
-    Company C, and Company D were {stock_a_price} dollars per share, {stock_b_price}
-    dollars per share, {stock_c_price} dollars per share, and {stock_d_price} dollars
-    per share, respectively. Posts by other traders on the forum are as follows:
+    After the close of trading yesterday, the stock prices of Company A and Company B
+    were {stock_a_price} dollars per share and {stock_b_price} dollars per share, respectively.
+    Posts by other traders on the forum are as follows:
     {lastday_forum_message}
     """
 )
@@ -39,14 +38,13 @@ DECIDE_IF_LOAN_PROMPT = NamedBlock(
     content="""
     It is the {date} day, and your current character is {character}.
     You hold {stock_a} shares of Company A, {stock_b} shares of Company B,
-    {stock_c} shares of Company C, {stock_d} shares of Company D,
     now you have {cash} dollars in cash and {debt} in your loan situation.
     You need to decide whether to continue the loan and the amount of the loan.
     The alternative type is {loan_type_prompt}, and you should use the number to select a loan type.
     The loan amount shall not exceed {max_loan}.
 
     Return the result as json, for example:
-    {{"loan": "yes", "loan_type": 3, "amount": 1000}}
+    {{"loan": "yes", "loan_type": 1, "amount": 1000}}
 
     If no loan is required, return:
     {{"loan" : "no"}}
@@ -60,7 +58,7 @@ LOAN_RETRY_PROMPT = NamedBlock(
     The following questions appeared in the loan format you last answered:
     {fail_response}.
     You should return the results as json, for example:
-    {{"loan": "yes", "loan_type": 2, "amount": 1000}}
+    {{"loan": "yes", "loan_type": 1, "amount": 1000}}
     If no loan is required, return:
     {{"loan" : "no"}}
     Please answer again.
@@ -72,21 +70,18 @@ DECIDE_BUY_STOCK_PROMPT = NamedBlock(
     name="Instruction",
     content="""
     It is the {time} trading session on the {date} day, and after the previous session,
-    the stock price of Company A is {stock_a_price}, the stock price of Company B is
-    {stock_b_price}, the stock price of Company C is {stock_c_price}, and the stock
-    price of Company D is {stock_d_price}.
+    the stock price of Company A is {stock_a_price}, and the stock price of Company B is
+    {stock_b_price}.
     In the current session, the buy and sell order of stock A is {stock_a_deals},
-    the buy and sell order of stock B is {stock_b_deals}, the buy and sell order of
-    stock C is {stock_c_deals}, and the buy and sell order of stock D is {stock_d_deals}.
-    You currently hold {stock_a} shares of Company A, {stock_b} shares of Company B,
-    {stock_c} shares of Company C, {stock_d} shares of Company D, and {cash} yuan in cash.
-    You need to decide whether to buy/sell shares of Company A or Company B or Company C or Company D,
+    and the buy and sell order of stock B is {stock_b_deals}.
+    You currently hold {stock_a} shares of Company A, {stock_b} shares of Company B, and {cash} dollars in cash.
+    You need to decide whether to buy/sell shares of Company A or Company B,
     and how much to buy/sell and at what price.
     You can refer to the current share price and the market to determine the price yourself,
     not the current share price. The quantity must be an integer.
     We encourage you to buy and sell more. You can only answer one json action.
     Return the result as json, for example:
-    {{"action_type":"buy"|"sell", "stock":"A"|"B"|"C"|"D", amount: 100, price : 30.1}}
+    {{"action_type":"buy"|"sell", "stock":"A"|"B", "amount": 100, "price": 30.1}}
     If neither buy nor sell, return:
     {{"action_type" : "no"}}
     """
@@ -99,7 +94,7 @@ BUY_STOCK_RETRY_PROMPT = NamedBlock(
     The following questions appeared in the action format you last answered:
     {fail_response}.
     You should return the result as json, for example:
-    {{"action_type":"buy"|"sell", "stock":"A"|"B"|"C"|"D", amount: 100, price: 30.1}}
+    {{"action_type":"buy"|"sell", "stock":"A"|"B", "amount": 100, "price": 30.1}}
     If neither buy nor sell, return:
     {{"action_type" : "no"}}
     Please answer again. You can only answer one json action.
@@ -109,7 +104,7 @@ BUY_STOCK_RETRY_PROMPT = NamedBlock(
 
 FIRST_DAY_FINANCIAL_REPORT = NamedVariable(
     refname="first_day_financial_prompt",
-    name="The last 3 years financial report of Stock A, B, C and D",
+    name="The last 3 years financial report of Stock A and B",
     content="""
     The following lists the financial data for the past three years, covering a total of twelve quarters.
     Stock A:
@@ -120,20 +115,12 @@ FIRST_DAY_FINANCIAL_REPORT = NamedVariable(
     Revenue million: 570.00, 774.00, 643.00, 995.00, 684.46, 934.37, 782.08, 1204.05, 788.29, 1100.32, 914.96, 1418.37
     Net profit million: 85.9691, 142.086, 87.5419224, 135.7643678, 132.7973368, 169.6505746, 194.9436163, 272.1084953, 225.1707811, 356.7201332
     Cash flow million: 68.97, 90.171, 82.1754, 124.773, 75.4954968, 123.5240842, 132.7191287, 153.7571212, 194.9436163, 261.1053212, 216.3871992, 345.6568448
-    Stock C:
-    Revenue million: 35015.73, 36595.79, 35484.08, 36814.05, 37134.12, 38902.45, 37654.89, 39201.33, 40123.56, 41867.90, 40567.12, 42234.78
-    Net profit million: 8939.515869, 9485.9947259, 8554.1471656, 8977.474233, 9876.321456, 10423.567891, 9123.456789, 9589.012345, 10789.654321, 11234.567890, 9876.543210, 10345.678901
-    Cash flow million: 8456.298795, 8915.1004019, 8380.2751736, 9106.323408, 9321.456789, 9876.543210, 8567.890123, 9012.345678, 10123.456789, 10678.901234, 9324.567890, 9789.012345
-    Stock D:
-    Revenue million: 17925.22, 17725.45, 17714.92, 17732.90, 17845.67, 17689.34, 17654.88, 17701.23, 17989.45, 17834.56, 17789.01, 17845.67
-    Net profit million: 1444.772732, 1745.956825, 1679.374416, 1478.923860, 1589.456321, 1890.123456, 1812.345678, 1601.234567, 1723.456789, 2015.678901, 1934.567890, 1712.345678
-    Cash flow million: 1193.819652, 1830.1527125, 1709.489780, 1382.279555, 1487.654321, 1789.012345, 1712.345678, 1490.123456, 1612.345678, 1901.234567, 1823.456789, 1601.234567
     """
 )
 
 
 FIRST_DAY_BACKGROUND_KNOWLEDGE = NamedBlock(
-    name="The initial financial situation of Stock A, B, C and D",
+    name="The initial financial situation of Stock A and B",
     content="""
     Company A has been listed for 10 years, deeply rooted in the chemical industry. However, the company's operations
     have encountered bottlenecks, with revenues declining over the past three years.
@@ -142,22 +129,17 @@ FIRST_DAY_BACKGROUND_KNOWLEDGE = NamedBlock(
     Company B, as a technology company, has just been listed for three years and is in a period of business growth.
     Last year, its revenue declined due to the overall tech environment, but the company's operations remain robust.
 
-    Company C and Company D are mature market participants with different capital structures and growth expectations.
-    Please infer and update your beliefs based on the financial reports and evolving market information.
-
-    The last 3 years financial report of stock A, B, C and D is listed in {first_day_financial_prompt}.
+    The last 3 years financial report of stock A and B is listed in {first_day_financial_prompt}.
     """
 )
 
 
 SEASONAL_FINANCIAL_REPORT = NamedVariable(
     refname="seasonal_financial_report",
-    name="The Seasonal financial report of Stock A, B, C and D",
+    name="The Seasonal financial report of Stock A and B",
     content="""
     Stock A: {stock_a_report}
     Stock B: {stock_b_report}
-    Stock C: {stock_c_report}
-    Stock D: {stock_d_report}
     """
 )
 
@@ -177,10 +159,10 @@ NEXT_DAY_ESTIMATE_PROMPT = NamedBlock(
     name="Instruction",
     content="""
     Based on the market information and forum information of the current trading day, please estimate whether you
-    will buy and sell stock A and stock B and stock C and stock D tomorrow and whether you will choose a loan.
+    will buy and sell stock A and stock B tomorrow and whether you will choose a loan.
     Actions that are expected to take place are marked yes, and actions that will not take place are marked no.
     Return the result in JSON format, for example:
-    {{"buy_A":"yes", "buy_B":"no", "buy_C":"yes", "buy_D":"no", "sell_A":"yes", "sell_B":"no", "sell_C":"yes", "sell_D":"no", "loan":"yes"}}
+    {{"buy_A":"yes", "buy_B":"no", "sell_A":"yes", "sell_B":"no", "loan":"yes"}}
     """
 )
 
@@ -192,6 +174,6 @@ NEXT_DAY_ESTIMATE_RETRY = NamedBlock(
     The following questions appeared in the JSON format you last answered:
     {fail_response}.
     Return the result in JSON format, for example:
-    {{"buy_A":"yes", "buy_B":"no", "buy_C":"yes", "buy_D":"no", "sell_A":"yes", "sell_B":"no", "sell_C":"yes", "sell_D":"no", "loan":"yes"}}
+    {{"buy_A":"yes", "buy_B":"no", "sell_A":"yes", "sell_B":"no", "loan":"yes"}}
     """
 )

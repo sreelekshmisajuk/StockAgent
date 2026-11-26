@@ -13,6 +13,7 @@ class TradeRecord:
         self.price = price
 
     def write_to_excel(self, file_name="res/trades.xlsx"):
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
         if os.path.isfile(file_name):
             existing_df = pd.read_excel(file_name)
         else:
@@ -41,6 +42,7 @@ class StockRecord:
         self.stock_b_price = stock_b_price
 
     def write_to_excel(self, file_name="res/stocks.xlsx"):
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
         if os.path.isfile(file_name):
             existing_df = pd.read_excel(file_name)
         else:
@@ -84,6 +86,7 @@ class AgentRecordDaily:
         self.will_sell_b = js["sell_B"]
 
     def write_to_excel(self, file_name="res/agent_day_record.xlsx"):
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
         if os.path.isfile(file_name):
             existing_df = pd.read_excel(file_name)
         else:
@@ -118,6 +121,7 @@ class AgentRecordSession:
             self.price = action_json["price"]
 
     def write_to_excel(self, file_name="res/agent_session_record.xlsx"):
+        os.makedirs(os.path.dirname(file_name), exist_ok=True)
         if os.path.isfile(file_name):
             existing_df = pd.read_excel(file_name)
         else:

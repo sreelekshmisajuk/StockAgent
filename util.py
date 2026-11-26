@@ -18,7 +18,7 @@ def _get_setting(name: str, default: str = "") -> str:
 
 
 OPENAI_API_KEY = _get_setting("OPENAI_API_KEY", "")
-GOOGLE_API_KEY = _get_setting("GOOGLE_API_KEY", "")
+GOOGLE_API_KEY = _get_setting("GOOGLE_API_KEY", "") or os.getenv("GEMINI_API_KEY", "")
 YUNWU_API_KEY = _get_setting("YUNWU_API_KEY", "") or OPENAI_API_KEY or GOOGLE_API_KEY
 YUNWU_API_BASE_URL = _get_setting("YUNWU_API_BASE_URL", "https://yunwu.ai/v1")
 
